@@ -1,0 +1,62 @@
+/*
+mplement atoi to convert a string to an integer.
+
+Hint: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.
+
+Notes: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front.
+*/
+
+class Solution {
+public:
+    int myAtoi(string str) {
+        int ret = 0;
+        std::stack<int> s;
+        bool space_end = false;
+        int sign = 1;
+        for (unsigned int i = 0;i<str.size();i++) {
+            //48 ->0
+            //57 ->9 43 + 44 ,   45 -
+            char t = str.at(i);
+            if (!space_end) {
+                if (t == 32 ) {
+                    continue;
+                } else if (t == 43) {
+                    space_end = true;
+                    continue;
+                } else if (t == 45) {
+                    sign = -1;
+                    space_end = true;
+                    continue;
+                } else space_end = true;
+            }
+            if (t >=48 && t <= 57) {
+                s.push(t - 48);
+            } else break;
+        }
+        int multi = 1;
+        int digi = 1;
+        int max_digit = 0;
+        int max_int = INT_MAX;
+        while (max_int > 1) {
+            max_int /= 10;
+            max_digit++;
+        }
+        if (s.size() > max_digit) {
+            return sign > 0? INT_MAX:INT_MIN;
+        }
+        while (s.size() > 0) {
+            if (digi == max_digit && sign < 0 && -1 * s.top() < (INT_MIN + ret) / multi) {
+                ret = INT_MIN;
+                break;
+            } else if (digi == max_digit && sign > 0 && s.top() > (INT_MAX - ret) / multi) {
+                ret = INT_MAX;
+                break;
+            }
+            ret += s.top()*multi;
+            s.pop();
+            multi *= 10;
+            digi++;
+        }
+        return ret * sign;
+    }
+};
