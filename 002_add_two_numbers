@@ -1,0 +1,78 @@
+/*
+You are given two non-empty linked lists representing two non-negative integers. 
+The digits are stored in reverse order and each of their nodes contain a single digit. 
+Add the two numbers and return it as a linked list.
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+*/
+
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+     
+	 int next_digit = 0;
+	 int next_next_digit = 0;
+	 //ListNode* thisNode = new ListNode(addnum(l1,l2) + next_digit);	
+	 //next_digit = addnumNextDigit(l1,l2);
+	 ListNode*  ret = NULL;
+	 ListNode*  thisNode;
+	 ListNode*  prevNode;
+	 
+	 while(l1 != NULL || l2 != NULL || next_digit > 0 || next_next_digit > 0) {
+	 	
+	 	int i1 = l1 !=NULL? l1->val: 0;
+     	int i2 = l2 !=NULL? l2->val: 0;
+     	thisNode = new ListNode(_Sum(i1,i2, &next_next_digit, next_digit));
+     	next_digit = addnumNextDigit(i1,i2) + next_next_digit;
+     	if (ret == NULL) {
+     	  ret = thisNode;	
+     	  prevNode = thisNode;
+		 } else {
+		  prevNode->next = thisNode; 
+		  prevNode = thisNode;
+		 }
+	 	
+	 	if (l1!=NULL) l1 = l1->next;
+	 	if (l2!=NULL) l2 = l2->next;
+	 	
+	 	
+	 }
+	    
+	    return ret;
+    }
+    
+private:
+    int _Sum(int i1, int i2, int* next, int next_digit) {
+		
+		int pureSum = addnum(i1,i2);
+				
+		if (pureSum+next_digit >= 10) {
+			*next = 1;
+			
+		return (pureSum+next_digit) %10;
+	} else {
+		*next = 0;
+		return pureSum+next_digit;
+	}
+	}
+	
+    
+	int addnum(int i1, int i2) {
+	
+	
+	if (i1+i2 >= 10) {
+		return (i1+i2) %10;
+	} else {
+		return i1+i2;
+	}
+	}
+	
+	int addnumNextDigit(int i1, int i2) {
+		
+	if (i1+i2 >= 10) {
+		return 1;
+	} else {
+		return 0;
+	}	
+		
+	}
+};
