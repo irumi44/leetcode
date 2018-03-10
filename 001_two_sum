@@ -1,0 +1,25 @@
+/*
+*Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+*You may assume that each input would have exactly one solution, and you may not use the same element twice.
+*/
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        std::vector<int> ret;
+        std::vector<int> saved_info;
+        for (int i = 0; i< nums.size() ; i++) {
+            
+            std::vector<int>::iterator it;
+            auto findindex = std::find(saved_info.begin(),saved_info.end(), nums[i]);
+            if (findindex != saved_info.end()) {
+                ret.push_back(int(std::distance(saved_info.begin(), findindex)));
+                ret.push_back(i);
+            }
+            saved_info.push_back(target - nums[i]);
+            
+        }
+        return ret;
+
+    }
+};
