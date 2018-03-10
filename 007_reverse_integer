@@ -1,0 +1,34 @@
+/*
+Given a 32-bit signed integer, reverse digits of an integer.
+*/
+
+class Solution {
+public:
+    int reverse(int x) {
+        int ret = 0;
+        int ax = abs(x);
+        if (ax < 0) return 0;
+        int sign = x>=0?1:-1;
+        int divi = 1;
+        
+        std::stack<int> ans;
+        while (true) {
+            int p = divi > INT_MAX / 10 ?ax / divi :(ax % (divi * 10)) / divi;
+            ans.push(p);
+            ax-=p * divi;
+            if (ax == 0) break;
+            divi *= 10;
+            }
+            int multi = 1;
+        while (ans.size() > 0) {
+            if (ans.top() > (INT_MAX - ret) / multi) {
+                ret = 0;
+                break;
+            }
+                ret += ans.top()*multi;
+                multi *= 10;
+                ans.pop();
+            }
+        return ret * sign;
+    }
+};
