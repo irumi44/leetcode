@@ -1,0 +1,38 @@
+/*
+convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
+*/
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if (numRows <= 1) return s;
+        std::string ret;
+        int inp_size = int(s.length());
+        ret.resize(s.length());
+        int i = 0;
+        for (int r =0;r<numRows;r++) {
+            int groupNum = 0;
+            if (r==0||r==numRows-1) {
+                while (groupNum*(2*numRows -2) + r < inp_size) {
+                    ret[i] = s[groupNum*(2*numRows -2)+r];
+                    i++;
+                    groupNum++;//r==0, r==numRows-1
+                }
+            } else {
+                while (true) {
+                    
+                    if (groupNum*(2*numRows -2)-r >= inp_size) break;
+                    if (groupNum>0) {
+                        ret[i] =s[groupNum*(2*numRows -2)-r];
+                        i++;//r==1
+                    }
+                    if (groupNum*(2*numRows -2)+r >= inp_size) break;
+                    ret[i] =s[groupNum*(2*numRows -2)+r];
+                    i++;
+                    groupNum++;
+                    
+                }
+            }
+        }
+        return ret;
+    }
+};
