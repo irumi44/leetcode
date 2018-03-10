@@ -1,0 +1,56 @@
+/*
+Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+*/
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        if (s.length() == 0) return "";
+        std::string sRet = "";
+        //for loop each element, if
+        //1. odd symmetry: n-m, n+m are matched
+        //2. even symmetry: n-m, n+m+1 are matched
+        //order n^2
+        int iMaxIndex = -1;
+        int iMaxRange = -1;
+        bool bOdd = false;
+        
+        for (int i = 0; i<s.length(); i++) {
+            int m = 0;
+            while (true) {
+                if (s[i-m] != s[i+m]) {
+                    m--;
+                    break;
+                }
+                if (i < m+1 || i+m+1 >= s.length()) break;
+                m++;
+            }
+            
+            if (m > iMaxRange) {
+                iMaxRange = m;
+                iMaxIndex = i;
+                bOdd = true;
+                //std::cout<<iMaxRange<<"\todd"<<iMaxIndex<<std::endl;
+            }
+            m = 0;
+            while (true) {
+                if (s[i-m] != s[i+m+1]) {
+                    m--;
+                    break;
+                }
+                if (i < m + 1 || i+m+2 >= s.length()) break;
+                m++;
+            }
+            if (m > iMaxRange || (bOdd && m == iMaxRange)) {
+                iMaxRange = m;
+                iMaxIndex = i;
+                bOdd = false;
+                //std::cout<<iMaxRange<<"\teven"<<iMaxIndex<<std::endl;
+            }
+        }
+        //std::cout<<iMaxRange<<"\t"<<iMaxIndex<<std::endl;
+        
+        if (iMaxRange >= 0) sRet.append(s, iMaxIndex - iMaxRange, bOdd? 2 * iMaxRange + 1: 2 * iMaxRange + 2);
+        
+        return sRet;
+    }
+};
