@@ -1,0 +1,44 @@
+/*
+Given a roman numeral, convert it to an integer.
+
+Input is guaranteed to be within the range from 1 to 3999.
+*/
+
+class Solution {
+public:
+    int romanToInt(std::string s) {
+        /*
+         VMDCLXVI
+         */
+        int ret=0;
+        int reta[s.length()];
+        int rev[s.length()];
+        for (int i = 0;i<s.length();i++) {
+            const char a = s[i];
+            if (a=='M') reta[i] = 1000;
+            else if (a=='D') reta[i] = 500;
+            else if (a=='C') reta[i] = 100;
+            else if (a=='L') reta[i] = 50;
+            else if (a=='X') reta[i] = 10;
+            else if (a=='I') reta[i] = 1;
+            else reta[i] = 5;
+            
+            if (i>0) {
+                if (reta[i] > reta[i-1]) {
+                int j = i-1;
+                while(j>=0 && reta[j] == reta[i-1]) {
+                    rev[j] = -1;
+                    j--;
+                 }
+                } else rev[i-1] = 1;
+            }
+        }
+        rev[s.length()-1] = 1;
+        for (int i = 0;i<s.length();i++) {
+          
+            ret += reta[i] * rev[i];
+        }
+        
+        return ret;
+    }
+};
