@@ -1,0 +1,65 @@
+/*
+Given an integer, convert it to a roman numeral.
+
+Input is guaranteed to be within the range from 1 to 3999.
+*/
+
+
+class Solution {
+public:
+    std::string intToRoman(int num) {
+        
+        int res = num;
+        int thou = (int) num / 1000;
+        num -= thou * 1000;
+        int fivh = (int) num / 500;
+        num -= fivh * 500;
+        int h = (int) num / 100;
+        num -= h * 100;
+        int fivt = (int) num / 50;
+        num -= fivt * 50;
+        int ten = (int) num / 10;
+        num -= ten * 10;
+        int fiv = (int) num / 5;
+        num -= fiv * 5;
+        int one = (int) num / 1;
+        
+        if (fivh ==1 && h==4) {
+        	fivh = 0;
+        	h=9;
+		}
+		if (fivt ==1 && ten==4) {
+        	fivt = 0;
+        	ten=9;
+		}
+		if (fiv ==1 && one==4) {
+        	fiv = 0;
+        	one=9;
+		}
+        std::string s = "";
+        s += repe("M","V",thou);
+        s += repe("D","M",fivh);
+        s += repe("C","D",h,"M");
+        s += repe("L","C",fivt);
+        s += repe("X","L",ten, "C");
+        s += repe("V","X",fiv);
+        s += repe("I","V",one, "X");
+              
+        return s; 
+    }
+    
+    std::string repe(std::string c, std::string cp, int i, std::string cpp = "") {
+    	if (i==9) {
+    		return c + cpp;
+		} else if (i==4) {
+    		return c + cp;
+		} else if (i==3) {
+			return c+c+c;
+		} else if (i==2) {
+			return c+c;
+		} else if (i==1) {
+			return c;
+		} else return "";
+    	
+	}
+};
