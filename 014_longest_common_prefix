@@ -1,0 +1,29 @@
+/*
+Write a function to find the longest common prefix string amongst an array of strings.
+
+*/
+
+class Solution {
+public:
+    std::string longestCommonPrefix(std::vector<std::string>& strs) {
+        if (strs.size()==0) return "";
+        std::string ret = "";
+        int ind = 0;
+        while (true) {
+        	char c;
+        	for (std::vector<std::string>::iterator it=strs.begin();it!=strs.end();++it) {
+        		if (ind >= (*it).length()) return ret;
+				if (it==strs.begin()) c = (*it)[ind];
+				else if (c != (*it)[ind]) return ret;
+				
+			}
+			ret.append(1,c);
+			
+			ind++;
+        	
+		}
+        
+        return ret;
+    }
+};
+
