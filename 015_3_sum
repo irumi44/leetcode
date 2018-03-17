@@ -1,0 +1,77 @@
+/*
+Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
+*/
+
+class Solution {
+public:
+    std::vector<std::vector<int> > threeSum(std::vector<int>& nums) {
+        //clock_t tStart = clock();
+        //three added to zero means
+        // two added equals to another one * -1
+        //uniqueness checking
+        //int count = (int)nums.size();
+        
+        //-3 -1 -1 -1 -1 0 2 4
+        //-3 -1 -1 -1 -1 0 2 4
+        
+        std::vector<std::vector<int> > ret;
+        if (nums.size() < 3) return ret;
+        std::sort(nums.begin(), nums.end());
+        int temp_it = nums[0];
+        bool rep = false;
+        bool zeros = false;
+        std::vector<int>::iterator beg = nums.begin();
+        for (std::vector<int>::iterator it = nums.begin()+1;it!=nums.end()-1;it++) {
+            if (temp_it==*it) {
+                if (!rep) {
+                    rep = true;
+                    beg = it-1;
+                } else {
+                    continue;
+                }
+            } else {
+                rep = false;
+                beg = nums.begin();
+            }
+            temp_it = *it;
+            std::vector<int>::iterator lh = it-1;
+            std::vector<int>::iterator rh = it+1;
+            int temp_lv = *lh+1;
+            while (true) {
+                int sum = *it + *lh + *rh;
+                //std::cout<<*it<<"\t"<<*lh<<"\t"<<*rh<<"\t"<<sum<<std::endl;
+                if (sum > 0) {
+                    if (lh == beg) break;
+                    lh--;
+                } else if (sum < 0) {
+                    rh++;
+                    if (rh == nums.end()) break;
+                } else {
+                    if (temp_lv == *lh) {
+                        if (lh == beg) break;
+                        lh--;
+                        continue;
+                    } else if (*it == *(it-1) )temp_lv = *lh;
+                    if (zeros && *it==0 && *lh ==0) continue;
+                    if (*it ==0 && *lh==0) zeros = true;
+                    std::vector<int> t;
+                    t.push_back(*it);
+                    t.push_back(*lh);
+                    t.push_back(*rh);
+                    ret.push_back(t);
+                    while (lh >= beg) {
+                        lh--;
+                        if (*lh != *(lh+1)) break;
+                    }
+                    while (rh < nums.end()) {
+                        rh++;
+                        if (*rh != *(rh-1)) break;
+                    }
+                    if (lh < beg || rh== nums.end()) break;
+                }
+            }
+            
+        }
+        return ret;
+    }
+};
