@@ -1,0 +1,51 @@
+/*
+Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+*/
+
+class Solution {
+public:
+    int threeSumClosest(std::vector<int>& nums, int target) {
+        
+        
+        if (nums.size() < 3) return NULL;
+        int ret = nums[0] + nums[1] + nums[2];
+        std::sort(nums.begin(), nums.end());
+        int temp_it = nums[0];
+        bool rep = false;
+        std::vector<int>::iterator beg = nums.begin();
+        for (std::vector<int>::iterator it = nums.begin()+1;it!=nums.end()-1;it++) {
+            if (temp_it==*it) {
+                if (!rep) {
+                    rep = true;
+                    beg = it-1;
+                } else {
+                    continue;
+                }
+            } else {
+                rep = false;
+                beg = nums.begin();
+            }
+            temp_it = *it;
+            std::vector<int>::iterator lh = it-1;
+            std::vector<int>::iterator rh = it+1;
+            while (true) {
+                int sum = *it + *lh + *rh;
+                //std::cout<<*it<<"\t"<<*lh<<"\t"<<*rh<<"\t"<<sum<<std::endl;
+                //-5 -2 -2 2 3   (-3)
+                if (abs(sum - target) < abs(ret - target)) ret = sum;
+                if (sum > target) {
+                    if (lh == beg) break;
+                    lh--;
+                } else if (sum < target) {
+                    rh++;
+                    if (rh == nums.end()) break;
+                } else {
+                    return target;
+                }
+            }
+            
+        }
+        
+        return ret;
+    }
+};
