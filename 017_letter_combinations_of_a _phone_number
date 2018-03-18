@@ -1,0 +1,43 @@
+/*
+Given a digit string, return all possible letter combinations that the number could represent.
+*/
+
+class Solution {
+public:
+    std::vector<std::string> letterCombinations(std::string digits) {
+        //97
+        std::vector<std::string> ret;
+        std::vector<int> arr;
+        int total = 1;
+        for (int i =0;i<digits.length();i++){
+            if (int(digits[i]) >= 50 && int(digits[i]) <55) {
+                arr.push_back(97+(int(digits[i]) - 50) *3); //50-> 97, 51->100 ...
+                total *=3;
+            } else if (int(digits[i]) == 56) {
+                arr.push_back(116);
+                total *=3;
+            } else if (int(digits[i]) == 57) {
+                arr.push_back(119);
+                total *=4;
+                
+            } else if (int(digits[i]) == 55) {
+                arr.push_back(112);
+                total *=4;
+            }
+        }
+        
+        if (arr.size() == 0) return ret;
+        for (int i=0;i<total;i++) {
+            std::string ret_unit = "";
+            int this_i = i;
+            for (std::vector<int>::iterator it = arr.begin();it!=arr.end();it++) {
+                int mod = (*it == 119 || *it == 112) ? 4 :3;
+                //std::cout<<*it<<"\t"<<this_i<<"\t"<<mod<<std::endl;
+                ret_unit += char(*it + this_i % mod);
+                this_i = (int)(this_i / mod);
+            }
+            ret.push_back(ret_unit);
+        }
+        return ret;
+    }
+};
