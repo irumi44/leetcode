@@ -1,0 +1,36 @@
+/*
+
+Given a linked list, remove the nth node from the end of list and return its head.
+
+*/
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dothis = head;
+        std::queue<ListNode*> q1;
+        
+        for (int i = 0;i<n;i++) {
+        	q1.push(dothis);
+        	if (dothis->next == NULL) return head->next;
+			dothis = dothis->next;
+		}
+		while (true) {
+			if (dothis->next == NULL) {//dothis is the end
+				ListNode* f = q1.front();
+				if (n==1) {
+					q1.front()->next = NULL;
+				} else {
+					q1.pop();
+					f->next = q1.front()->next;	
+				}
+				break;
+			}
+			q1.push(dothis);
+			q1.pop();
+			dothis = dothis->next;
+		}
+        
+        return head;
+    }
+};
