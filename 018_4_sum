@@ -1,0 +1,68 @@
+/*
+Given an array S of n integers, are there elements a, b, c, and d in S such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
+*/
+class Solution {
+public:
+    std::vector<std::vector<int> > fourSum(std::vector<int>& nums, int target) {
+        std::sort(nums.begin(), nums.end());
+        std::vector<std::vector<int> > ret;
+        int count = (int)nums.size();
+        if (count < 4) return ret;
+        //987654321000012345678
+        std::unordered_map<int, int> map1;
+        int chk = *(nums.begin()+1) -1;
+        for (std::vector<int>::iterator it = nums.begin()+1;it!=nums.end()-2;it++) {
+            if (*it == chk) continue;
+            chk = *it;
+            int chk2 = *(it+1)-1;
+            for (std::vector<int>::iterator it2 = it+1;it2!=nums.end()-1;it2++) {
+                if (*it2 == chk2) continue;
+                chk2 = *it2;
+                map1.insert(std::pair<int, int > ((it-nums.begin())*count + it2-nums.begin(), *it+*it2));
+                //std::cout<<*(it)<<"\t"<<*(it2)<<std::endl;
+            }
+        }
+        
+        for (std::unordered_map<int, int>::iterator it = map1.begin();it!=map1.end();it++) {
+            std::vector<int>::iterator lh = int(it->first / count) + nums.begin() - 1;
+            std::vector<int>::iterator rh = int(it->first % count) + nums.begin() + 1;
+            int temp_lv = *lh+1;
+            while (true) {
+                int sum = it->second + *lh + *rh;
+                //std::cout<<*it<<"\t"<<*lh<<"\t"<<*rh<<"\t"<<sum<<std::endl;
+                if (sum > target) {
+                    if (lh == nums.begin()) break;
+                    lh--;
+                } else if (sum < target) {
+                    rh++;
+                    if (rh == nums.end()) break;
+                } else {
+                    if (temp_lv == *lh) {
+                        if (lh == nums.begin()) break;
+                        lh--;
+                        continue;
+                    }
+                    temp_lv = *lh;
+                    std::vector<int> t;
+                    t.push_back(*(int(it->first / count) + nums.begin()));
+                    t.push_back(*(int(it->first % count) + nums.begin()));
+                    t.push_back(*lh);
+                    t.push_back(*rh);
+                    ret.push_back(t);
+                    while (lh >= nums.begin()) {
+                        lh--;
+                        if (*lh != *(lh+1)) break;
+                    }
+                    while (rh < nums.end()) {
+                        rh++;
+                        if (*rh != *(rh-1)) break;
+                    }
+                    if (lh < nums.begin() || rh== nums.end()) break;
+                }
+            }
+            
+        }
+        return ret;
+    }
+};
+
