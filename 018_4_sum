@@ -11,8 +11,13 @@ public:
         //987654321000012345678
         std::unordered_map<int, int> map1;
         int chk = *(nums.begin()+1) -1;
+        bool rep = false;
         for (std::vector<int>::iterator it = nums.begin()+1;it!=nums.end()-2;it++) {
-            if (*it == chk) continue;
+            if (*it == chk) {
+            	if (rep) continue;
+            	else rep = true;
+			} else 	rep = false;
+			
             chk = *it;
             int chk2 = *(it+1)-1;
             for (std::vector<int>::iterator it2 = it+1;it2!=nums.end()-1;it2++) {
@@ -26,19 +31,28 @@ public:
         for (std::unordered_map<int, int>::iterator it = map1.begin();it!=map1.end();it++) {
             std::vector<int>::iterator lh = int(it->first / count) + nums.begin() - 1;
             std::vector<int>::iterator rh = int(it->first % count) + nums.begin() + 1;
+            if (int(it->first / count)  - 1 >= 0 && *(int(it->first / count) + nums.begin()) == *(int(it->first / count) + nums.begin() - 1)) {
+            	if (int(it->first / count)  - 2 >= 0 && *(int(it->first / count) + nums.begin()) == *(int(it->first / count) + nums.begin() - 2)) {
+            		continue;
+				} else rep = true;
+			} else rep = false;
+            
             int temp_lv = *lh+1;
+            std::vector<int>::iterator beg = rep?int(it->first / count) + nums.begin() - 1 : nums.begin();
+            
             while (true) {
                 int sum = it->second + *lh + *rh;
-                //std::cout<<*it<<"\t"<<*lh<<"\t"<<*rh<<"\t"<<sum<<std::endl;
+                
                 if (sum > target) {
-                    if (lh == nums.begin()) break;
+                    if (lh == beg) break;
                     lh--;
                 } else if (sum < target) {
                     rh++;
                     if (rh == nums.end()) break;
                 } else {
+                	//std::cout<<rep<<"\t"<<*(int(it->first / count) + nums.begin())<<"\t"<<*(int(it->first % count) + nums.begin())<<"\t"<<*lh<<"\t"<<*rh<<std::endl;
                     if (temp_lv == *lh) {
-                        if (lh == nums.begin()) break;
+                    	if (lh == beg) break;
                         lh--;
                         continue;
                     }
@@ -49,19 +63,21 @@ public:
                     t.push_back(*lh);
                     t.push_back(*rh);
                     ret.push_back(t);
-                    while (lh >= nums.begin()) {
+                    while (lh >= beg) {
                         lh--;
+                        
                         if (*lh != *(lh+1)) break;
                     }
                     while (rh < nums.end()) {
                         rh++;
                         if (*rh != *(rh-1)) break;
                     }
-                    if (lh < nums.begin() || rh== nums.end()) break;
+                    if (lh < beg || rh== nums.end()) break;
                 }
             }
             
         }
+        
         return ret;
     }
 };
