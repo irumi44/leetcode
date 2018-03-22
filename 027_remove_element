@@ -1,0 +1,30 @@
+/*Given an array and a value, remove all instances of that value in-place and return the new length.*/
+
+class Solution {
+public:
+    int removeElement(std::vector<int>& nums, int val) {
+        int ret = 0;
+        if (nums.size()==0) return  0;
+        if (nums.size()==1 && nums[0] == val) return 0;
+        std::vector<int>::iterator itswap = nums.begin();
+        bool change = false;
+        for (std::vector<int>::iterator it = nums.begin();it!=nums.end();it++){
+            if (*it == val) {
+                if (!change) {
+                    change = true;
+                    itswap = it;
+                }
+                continue;
+            } else {
+                ret++;
+                if (change) {
+                    *itswap = *it;
+                    itswap++;
+                }
+            }
+        }
+        
+        
+        return ret;
+    }
+};
