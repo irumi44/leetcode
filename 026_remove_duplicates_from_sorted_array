@@ -1,0 +1,34 @@
+/*Given a sorted array, remove the duplicates in-place such that each element appear only once and return the new length.
+
+*/
+
+class Solution {
+public:
+    int removeDuplicates(std::vector<int>& nums) {
+        int ret = 1;
+        if (nums.size()==0) return  0;
+        if (nums.size()==1) return  1;
+        int rep = nums[0];
+        std::vector<int>::iterator itswap = nums.begin();
+        bool change = false;
+        for (std::vector<int>::iterator it = nums.begin()+1;it!=nums.end();it++){
+            if (*it == rep) {
+                if (!change) {
+                    change = true;
+                    itswap = it;
+                }
+                continue;
+            } else {
+                ret++;
+                rep = *it;
+                if (change) {
+                    *itswap = *it;
+                    itswap++;
+                }
+            }
+        }
+        
+        
+        return ret;
+    }
+};
