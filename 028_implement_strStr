@@ -1,0 +1,39 @@
+/*
+Implement strStr().
+
+Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack
+*/
+
+class Solution {
+public:
+    int strStr(std::string haystack, std::string needle) {
+        int ret = -1;
+        int temp_start = -1, ind1 = 0, ind2 = 0;
+        bool mat = false;
+        int end1 = int(haystack.length()), end2 = int(needle.length());
+        
+        if (end2==0) return 0;
+        while (true) {
+            if (ind1 == end1) return -1;
+            if (haystack[ind1] == needle[ind2]) {
+                if (!mat) {
+                    temp_start = ind1;
+                    mat = true;
+                }
+                ind1++;
+                ind2++;
+                if (ind2 == end2) return temp_start;
+            } else if (mat) {
+                mat = false;
+                ind1 = temp_start+1;
+                ind2 = 0;
+            } else {
+                ind2 = 0;
+                ind1++;
+            }
+            
+        }
+        
+        return ret;
+    }
+};
