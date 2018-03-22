@@ -1,0 +1,50 @@
+/*
+Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+*/
+
+class Solution {
+public:
+    ListNode* mergeKLists(std::vector<ListNode*>& lists) {
+    	
+    	//compare k values at a time, compare max len times
+    	ListNode* smallestnode = smallest(lists);
+    	if (!smallestnode) return smallestnode;
+    	ListNode* ret = new ListNode(smallestnode->val);
+    	ListNode* temp_ret = ret;
+    	
+     	while (true) {
+     		smallestnode = smallest(lists);
+      		if (!smallestnode) break;
+    		temp_ret->next = smallestnode;	
+			temp_ret = 	temp_ret->next;	
+		}
+    	    	
+    	return ret;
+    }
+    
+    ListNode* smallest(std::vector<ListNode*>& lists) {
+    	static int now_val = INT_MIN;
+    	int small = INT_MAX;
+    	ListNode* itmove = NULL;
+    	int ind = 0;	
+    	for (std::vector<ListNode*>::iterator it = lists.begin();it!=lists.end();it++) {
+    		if (!*it) continue;
+    		if (now_val == (*it)->val) {
+				itmove = *it;
+				*it = (*it)->next;
+				return itmove;
+			}
+    		if (small > (*it)->val) {
+    			small = (*it)->val;
+				itmove = *it;
+				ind = int(it - lists.begin());
+			}
+		}
+		if (!itmove) return itmove;			
+		lists[ind] = lists[ind]->next;
+		now_val = small;
+				
+		return itmove;
+	}
+    
+};
