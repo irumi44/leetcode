@@ -1,0 +1,46 @@
+/*Divide two integers without using multiplication, division and mod operator.
+
+If it is overflow, return MAX_INT.*/
+
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        if (dividend == 0) return 0;
+        int ret = 0;
+        bool pos;
+        if (dividend>0 && divisor<0) {
+            divisor = 0-divisor;
+            pos = false;
+        } else if (dividend<0 && divisor>0 ) {
+            dividend = 0-dividend;
+            pos = false;
+        } else if (dividend<0 && divisor<0 ) {
+            dividend = 0-dividend;
+            divisor = 0-divisor;
+            pos = true;
+        } else {
+            pos = true;
+        }
+        dividend-= divisor;
+        
+        while (dividend>=0) {
+            ret++;
+            if (ret == INT_MAX) {
+                if (pos) return INT_MAX;
+                else if (dividend>= divisor) return INT_MIN;
+            }
+            dividend-= divisor;
+            //std::cout<<dividend<<std::endl;
+            if (dividend > divisor && (dividend ^ divisor)>>16 > 0 && divisor>>16 ==0
+                && dividend > divisor<<16) {
+                //std::cout<<dividend<<"\t"<<((dividend ^ divisor)>>16)<<"\t"<<(divisor<<16)<<"\t"<<divisor<<std::endl;
+                int temp = divisor<<16;
+                dividend -= temp;
+                
+                ret += 65536;
+            }
+        }
+        
+        return pos?ret:0-ret;
+    }
+};
