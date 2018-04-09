@@ -1,0 +1,62 @@
+/*
+Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+
+The replacement must be in-place, do not allocate extra memory.
+
+Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+1,2,3 → 1,3,2
+3,2,1 → 1,2,3
+1,1,5 → 1,5,1
+*/
+
+
+class Solution {
+public:
+    void swap(int i, int j, std::vector<int>& nums) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    int min_larger(int val, int i, std::vector<int>& nums) {
+        int temp = val, i_e = (int)nums.size() - 1;
+        int r = -1;
+        while (i<=i_e) {
+            int check_num = nums[i];
+            if (check_num > val && (temp == val || check_num < temp)) {
+                temp = nums[i];
+                r = i;
+            }
+            i++;
+        }
+        return r;
+    }
+    void nextPermutation(std::vector<int>& nums) {
+        int i_end = (int)nums.size() - 1;
+        if (i_end<=0) return;
+        while (i_end > 0 ) {
+            if (nums[i_end] > nums[i_end - 1]) {
+                int i_s = min_larger(nums[i_end], i_end, nums);
+                
+                if (i_s > -1) {
+                    swap(i_end, i_s, nums);
+                    std::sort(nums.begin() + i_end + 1, nums.end());
+                    return;
+                } else {
+                    i_s = min_larger(nums[i_end - 1], i_end - 1, nums);
+                    //std::cout<<i_s<<"\t"<<i_end<<std::endl;
+                    if (i_s > -1) {
+                        swap(i_end - 1, i_s, nums);
+                        std::sort(nums.begin() + i_end, nums.end());
+                        return;
+                    }
+                }
+                break;
+            }
+            i_end--;
+        }
+        
+        std::sort(nums.begin(), nums.end());
+    }
+};
